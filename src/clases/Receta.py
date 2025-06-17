@@ -1,8 +1,8 @@
 from typing import List
 from datetime import datetime
-from Paciente import Paciente
-from Medico import Medico
-from Especialidad import Especialidad
+from clases.Paciente import Paciente
+from clases.Medico import Medico
+from clases.Especialidad import Especialidad
 
 class Receta:
     def __init__(self, paciente: Paciente, medico: Medico, medicamentos: List[str]):
@@ -17,8 +17,3 @@ class Receta:
     def __repr__(self):
         return self.__str__()
 
-Pedro = Paciente('Pedro Neto', '45966431', '1900-01-01')
-Cardiologia = Especialidad('Cardiologia', ['lunes', 'miercoles', 'viernes'])
-Miguel = Medico('Miguel Ortiz', '45678', [Cardiologia])
-Receta1 = Receta(Pedro, Miguel, ['Clona', 'Fentanilo'])
-# print(Receta1)

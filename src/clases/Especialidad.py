@@ -13,9 +13,3 @@ class Especialidad:
     
     def __str__(self):
         return '{} (Dias: {})'.format(self.__tipo__, ', '.join(self.__dias__))
-
-
-
-Cardiologia = Especialidad('Cardiologia', ['lunes', 'miercoles', 'viernes'])
-Pediatria = Especialidad('Pediatria', ['jueves'])
-# print(Cardiologia)

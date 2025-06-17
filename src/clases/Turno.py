@@ -1,7 +1,7 @@
 from datetime import datetime
-from Medico import Medico
-from Paciente import Paciente
-from Especialidad import Especialidad
+from clases.Medico import Medico
+from clases.Paciente import Paciente
+from clases.Especialidad import Especialidad
 
 class Turno:
     def __init__(self, paciente: Paciente, medico: Medico, fecha_hora: datetime, especialidad: str):
@@ -22,8 +22,3 @@ class Turno:
     def __repr__(self):
         return self.__str__()
 
-Pedro = Paciente('Pedro Neto', '45966431', '1900-01-01')
-Cardiologia = Especialidad('Cardiologia', ['lunes', 'miercoles', 'viernes'])
-Miguel = Medico('Miguel Ortiz', '45678', [Cardiologia])
-Turno1 = Turno(Pedro, Miguel, '2025-06-25 13:30', 'Cardiologia')
-# print(Turno1)

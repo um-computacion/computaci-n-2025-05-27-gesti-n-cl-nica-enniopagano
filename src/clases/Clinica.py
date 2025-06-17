@@ -1,17 +1,23 @@
-from Paciente import Paciente
-from Medico import Medico
-from Turno import Turno
-from HistoriaClinica import HistoriaClinica
-from Receta import Receta
+from clases.Paciente import Paciente
+from clases.Medico import Medico
+from clases.Turno import Turno
+from clases.HistoriaClinica import HistoriaClinica
+from clases.Receta import Receta
 from typing import Dict, List
 from datetime import datetime
+from excepciones.MedicoNoDisponible import MedicoNoDisponibleException
+from excepciones.PacienteNoEncontrado import PacienteNoEncontradoException
+from excepciones.RecetaInvalida import RecetaInvalidaException
+from excepciones.TurnoOcupado import TurnoOcupadoException
+
+
 
 class Clinica:
     def __init__(self):
-        self.__pacientes__: Dict[str, Paciente]
-        self.__medicos__: Dict[str, Medico]
-        self.__turnos__: List[Turno]
-        self.__historias_clinicas__: Dict[str, HistoriaClinica]
+        self.__pacientes__: Dict[str, Paciente] = {}
+        self.__medicos__: Dict[str, Medico] = {}
+        self.__turnos__: List[Turno] = []
+        self.__historias_clinicas__: Dict[str, HistoriaClinica] = {}
 
     def agregar_paciente(self, paciente: Paciente):
         dni = paciente.obtener_dni()
@@ -28,36 +34,33 @@ class Clinica:
         
         self.__medicos__[matricula] = medico
 
-    def obtener_pacientes(self) -> list[Paciente]:
+    def obtener_pacientes(self) -> List[Paciente]:
         return self.__pacientes__
     
-    def obtener_medicos(self) -> list[Medico]:
+    def obtener_medicos(self) -> List[Medico]:
         return self.__medicos__
     
     def obtener_medico_por_matricula(self, matricula: str) -> Medico:
+        self.validar_existencia_medico(matricula)
         return self.__medicos__[matricula]
     
     def agendar_turno(self, dni: str, matricula: str, especialidad: str, fecha_hora: datetime):
-        
-
         paciente = self.__pacientes__[dni]
         medico = self.__medicos__[matricula]
-
         dia_semana = self.obtener_dia_semana_en_espanol(fecha_hora)
         
         self.validar_especialidad_en_dia(medico, especialidad, dia_semana)
-        
         self.validar_turno_no_duplicado(matricula, fecha_hora)
         
         nuevo_turno = Turno(paciente, medico, fecha_hora, especialidad)
+
         self.__turnos__.append(nuevo_turno)
-        
         self.__historias_clinicas__[dni].agregar_turno(nuevo_turno)
 
-    def obtener_turnos(self) -> list[Turno]:
+    def obtener_turnos(self) -> List[Turno]:
         return self.__turnos__
     
-    def emitir_receta(self, dni: str, matricula: str, medicamentos: list[str]):
+    def emitir_receta(self, dni: str, matricula: str, medicamentos: List[str]):
         self.validar_existencia_paciente(dni)
         self.validar_existencia_medico(matricula)
         
@@ -88,13 +91,13 @@ class Clinica:
             fecha_turno = turno.obtener_fecha_hora()
             nombre_medico = turno.__medico__.__nombre__
             if medico_matricula == matricula and fecha_turno == fecha_hora:
-                raise TurnoOcupadoException(f'El médico {nombre_medico} ya tiene un turno para el {fecha_hora.strftime('%d/%m/%Y a las %H:%M')}')
+                raise TurnoOcupadoException(f"El médico {nombre_medico} ya tiene un turno para el {fecha_hora.strftime('%d-%m-%Y %H:%M')}")
         
     def obtener_dia_semana_en_espanol(self, fecha_hora: datetime) -> str:
         dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
         return dias[fecha_hora.weekday()]
     
     def validar_especialidad_en_dia(self, medico: Medico, especialidad_solicitada: str, dia_semana: str):
-        especialidad_disponible = (medico.obtener_especialidad_para_dia(dia_semana)).lower()
-        if especialidad_disponible != especialidad_solicitada.lower():
-            raise MedicoNoDisponible(f'El medico no atiende {especialidad_solicitada} los dias {dia_semana}')
+        especialidad_disponible = str((medico.obtener_especialidad_para_dia(dia_semana)))
+        if especialidad_disponible.lower() != especialidad_solicitada.lower():
+            raise MedicoNoDisponibleException(f'El medico no atiende {especialidad_solicitada} los dias {dia_semana}')

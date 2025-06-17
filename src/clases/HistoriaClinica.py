@@ -1,16 +1,15 @@
-from Paciente import Paciente
-from Turno import Turno
-from Receta import Receta
+from clases.Paciente import Paciente
+from clases.Turno import Turno
+from clases.Receta import Receta
 from typing import List
-
-from Medico import Medico
-from Especialidad import Especialidad
+from clases.Medico import Medico
+from clases.Especialidad import Especialidad
 
 class HistoriaClinica:
-    def __init__(self, paciente: Paciente, turnos: List[Turno], recetas: List[Receta]):
+    def __init__(self, paciente: Paciente):
         self.__paciente__ = paciente
-        self.__turnos__ = turnos
-        self.__recetas__ = recetas
+        self.__turnos__: List[Turno] = []
+        self.__recetas__: List[Receta] = []
 
 
     def agregar_turno(self, turno: Turno):
@@ -39,18 +38,3 @@ class HistoriaClinica:
             f'Recetas:\n{recetas_str}'
         )
 
-Pedro = Paciente('Pedro Neto', '45966431', '1900-01-01')
-Cardiologia = Especialidad('Cardiologia', ['lunes', 'miercoles', 'viernes'])
-Miguel = Medico('Miguel Ortiz', '45678', [Cardiologia])
-Receta1 = Receta(Pedro, Miguel, ['Clona', 'Fentanilo'])
-Receta2 = Receta(Pedro, Miguel, ['Morfina', 'Pasto'])
-Turno1 = Turno(Pedro, Miguel, '2025-06-25 13:30', 'Cardiologia')
-Turno2 = Turno(Pedro, Miguel, '2025-08-25 13:30', 'Cardiologia')
-HistoriaClinica1 = HistoriaClinica(Pedro, [Turno1, Turno2], [Receta1, Receta2])
-# print(HistoriaClinica.obtener_recetas(HistoriaClinica1))
-print(HistoriaClinica1)
-# print([Turno1, Turno2])
-# turnos = HistoriaClinica1.__turnos__
-# print(dir(turnos[0]))
-# print(dir(HistoriaClinica1))
-# print(HistoriaClinica1.__turnos__[0].__medico__.__nombre__)

@@ -1,11 +1,11 @@
-from Especialidad import *
+from clases.Especialidad import Especialidad
 from typing import List, Optional
 
 class Medico:
-    def __init__(self, nombre:str, matricula:str, especialidades: List[Especialidad]):
+    def __init__(self, nombre:str, matricula:str):
         self.__nombre__ = nombre
         self.__matricula__ = matricula
-        self.__especialidades__ = especialidades
+        self.__especialidades__: List[Especialidad] = []
     
     def agregar_especialidad(self, especialidad: Especialidad) -> None:
         self.__especialidades__.append(especialidad)
@@ -22,6 +22,3 @@ class Medico:
     def __str__(self):
         return 'Medico: {} - Matricula: {} - Especialidades: {}'.format(self.__nombre__, self.__matricula__, ', '.join([especialidad.obtener_especialidad() for especialidad in self.__especialidades__ ]))
     
-Miguel = Medico('Miguel', '45678', [Cardiologia])
-# print(Medico.obtener_especialidad_para_dia(Miguel, 'Jueves'))
-# print(Miguel)
